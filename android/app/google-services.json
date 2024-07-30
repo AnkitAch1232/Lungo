@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "262438065132",
+    "project_id": "ntp-ankit-101",
+    "storage_bucket": "ntp-ankit-101.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:262438065132:android:52ceec9ab1671e063166c9",
+        "android_client_info": {
+          "package_name": "com.example.firebase_demo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvHjEFpSFKr3ZNGN-EhCXLHiicO4X8WHs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
