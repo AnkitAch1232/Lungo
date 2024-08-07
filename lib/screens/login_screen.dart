@@ -121,7 +121,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Container(
                     height: 57,
                     width: 348,
-                    decoration: const BoxDecoration(color: Color(0xff1FA309)),
+                    decoration: const BoxDecoration(
+                      color: Color(0xff1FA309),
+                    ),
                     child: const Center(
                       child: Text(
                         "Login",
@@ -137,9 +139,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(
                   height: 12,
                 ),
-                Container(
-                  height: 57,
-                  width: 348,
+                InkWell(
+                  onTap: () async {
+                    await AuthService().loginWithGoogle();
+                  },
                   child: Container(
                     height: 57,
                     width: 348,
