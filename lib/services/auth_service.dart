@@ -30,19 +30,7 @@ class AuthService {
     auth.signOut();
   }
 
-  Future addProduct()async{
-
-  }
-
-  Future editSelectedProduct()async{
-
-  }
-  Future deleteSelectedProduct()async{
-
-  }
-
-
-  Future getAllProduct()async{
-    
-  }
+  
 }
+
+

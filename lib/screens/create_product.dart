@@ -1,5 +1,6 @@
 import 'package:firebase_demo/models/product_model.dart';
 import 'package:firebase_demo/services/auth_service.dart';
+import 'package:firebase_demo/services/db_service.dart';
 import 'package:flutter/material.dart';
 
 class CreateProduct extends StatefulWidget {
@@ -63,12 +64,14 @@ class _CreateProductState extends State<CreateProduct> {
                   onPressed: () async {
                     ProductModel pro = ProductModel(
                       name: _nameController.text,
-                      price: int.parse(_priceController.toString()),
+                      price: int.parse(
+                        _priceController.toString(),
+                      ),
                       brand: _brandController.text,
                       manufacturedDate: _manufactureDateController.text,
                     );
                     try {
-                      await AuthService().addProduct();
+                      await DbService().addProduct(pro);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           backgroundColor: Colors.green,
