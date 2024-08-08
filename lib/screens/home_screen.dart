@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       const Text("Email:"),
                       Text(FirebaseAuth.instance.currentUser!.email ??
-                          "no EMail"),
+                          "no Email"),
                     ],
                   ),
                 ],
@@ -108,13 +108,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 await DbService()
                                                     .editProduct();
                                               },
-                                              child: const Icon(Icons.edit)),
+                                              child: const Icon(Icons.edit),),
                                           ElevatedButton(
                                               onPressed: () async {
                                                 await DbService()
                                                     .deleteSelectedProduct();
                                               },
-                                              child: const Icon(Icons.delete)),
+                                              child: const Icon(Icons.delete),),
                                         ],
                                       )),
                                 ],
