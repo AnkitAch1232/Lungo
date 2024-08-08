@@ -85,6 +85,7 @@ class _SigninScreenState extends State<SigninScreen> {
                 ),
                 TextField(
                   controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     hintText: "Email Address",
                     enabledBorder: OutlineInputBorder(

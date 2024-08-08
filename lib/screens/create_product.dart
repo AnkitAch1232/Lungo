@@ -1,5 +1,5 @@
 import 'package:firebase_demo/models/product_model.dart';
-import 'package:firebase_demo/services/auth_service.dart';
+//import 'package:firebase_demo/services/auth_service.dart';
 import 'package:firebase_demo/services/db_service.dart';
 import 'package:flutter/material.dart';
 
@@ -37,6 +37,7 @@ class _CreateProductState extends State<CreateProduct> {
               ),
               TextFormField(
                 controller: _priceController,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   hintText: "Price",
                   border: OutlineInputBorder(),
@@ -53,6 +54,7 @@ class _CreateProductState extends State<CreateProduct> {
               ),
               TextFormField(
                 controller: _manufactureDateController,
+                keyboardType: TextInputType.datetime,
                 decoration: InputDecoration(
                   hintText: "Manufacture Date",
                   border: OutlineInputBorder(),
@@ -65,7 +67,7 @@ class _CreateProductState extends State<CreateProduct> {
                     ProductModel pro = ProductModel(
                       name: _nameController.text,
                       price: int.parse(
-                        _priceController.toString(),
+                        _priceController.text,
                       ),
                       brand: _brandController.text,
                       manufacturedDate: _manufactureDateController.text,

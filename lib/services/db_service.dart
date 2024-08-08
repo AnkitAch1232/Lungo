@@ -13,10 +13,10 @@ class DbService{
     }
   }
 
-  Future editProduct()async{
+  Future editProduct(ProductModel product,int id)async{
     // await
   }
-  Future deleteSelectedProduct()async{
+  Future deleteSelectedProduct(int id)async{
     // await
   }
 

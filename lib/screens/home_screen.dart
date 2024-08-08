@@ -17,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "App homepage",
         ),
         actions: [
@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
               // await FirebaseAuth.instance.signOut();
               await AuthService().signOut();
             },
-            child: Text("Signout"),
+            child: const Text("Signout"),
           ),
         ],
       ),
@@ -41,14 +41,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Row(
                     children: [
-                      Text("UserName:"),
+                      const Text("UserName:"),
                       Text(FirebaseAuth.instance.currentUser!.displayName ??
                           "No Name"),
                     ],
                   ),
                   Row(
                     children: [
-                      Text("Email:"),
+                      const Text("Email:"),
                       Text(FirebaseAuth.instance.currentUser!.email ??
                           "no EMail"),
                     ],
@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   future: DbService().getAllProduct(),
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
-                      return Center(
+                      return const Center(
                         child: Text("Error occurs while getting the data"),
                       );
                     }
@@ -82,20 +82,20 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Row(
                                 children: [
                                   //Circle
-                                  Expanded(
+                                  const Expanded(
                                       flex: 1,
                                       child: CircleAvatar(
                                         radius: 23,
-                                        child: Text("Id" ?? "${index + 1}"),
+                                        child: Text("Id" ),
                                       )),
                                   //Content
-                                  Expanded(
+                                  const Expanded(
                                       flex: 4,
                                       child: Column(
                                         children: [
                                           Text("Product name"),
                                           Text("Product Brand"),
-                                          Text("Product "),
+                                          Text("Product Manufacture Date"),
                                         ],
                                       )),
                                   //Icons
@@ -108,13 +108,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 await DbService()
                                                     .editProduct();
                                               },
-                                              child: Icon(Icons.edit)),
+                                              child: const Icon(Icons.edit)),
                                           ElevatedButton(
                                               onPressed: () async {
                                                 await DbService()
                                                     .deleteSelectedProduct();
                                               },
-                                              child: Icon(Icons.delete)),
+                                              child: const Icon(Icons.delete)),
                                         ],
                                       )),
                                 ],
@@ -124,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                       );
                     } else {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     }
@@ -138,11 +138,11 @@ class _HomeScreenState extends State<HomeScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => CreateProduct(),
+              builder: (_) => const CreateProduct(),
             ),
           );
         },
-        child: Column(
+        child: const Column(
           children: [
             Icon(Icons.add),
             Text("Add New Product"),
