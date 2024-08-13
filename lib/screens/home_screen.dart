@@ -1,7 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_demo/models/product_model.dart';
 import 'package:firebase_demo/screens/create_product.dart';
-import 'package:firebase_demo/services/auth_service.dart';
 import 'package:firebase_demo/services/db_service.dart';
 import 'package:flutter/material.dart';
 
@@ -16,139 +14,181 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "App homepage",
-        ),
-        actions: [
-          ElevatedButton(
-            onPressed: () async {
-              // await FirebaseAuth.instance.signOut();
-              await AuthService().signOut();
-            },
-            child: const Text("Signout"),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            flex: 1,
-            child: Container(
-              height: 55,
-              width: 348,
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      const Text("UserName:"),
-                      Text(FirebaseAuth.instance.currentUser!.displayName ??
-                          "No Name"),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const Text("Email:"),
-                      Text(FirebaseAuth.instance.currentUser!.email ??
-                          "no Email"),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-              flex: 5,
-              child: Container(
-                child: FutureBuilder(
-                  future: DbService().getAllProduct(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return const Center(
-                        child: Text("Error occurs while getting the data"),
-                      );
-                    }
-                    if (snapshot.hasData) {
-                      List<ProductModel> product =
-                          snapshot.data as List<ProductModel>;
-                      return ListView.builder(
-                        itemCount: product.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              height: 54,
-                              width: 348,
-                              child: Row(
-                                children: [
-                                  //Circle
-                                  const Expanded(
-                                      flex: 1,
-                                      child: CircleAvatar(
-                                        radius: 23,
-                                        child: Text("Id" ),
-                                      )),
-                                  //Content
-                                  const Expanded(
-                                      flex: 4,
-                                      child: Column(
-                                        children: [
-                                          Text("Product name"),
-                                          Text("Product Brand"),
-                                          Text("Product Manufacture Date"),
-                                        ],
-                                      )),
-                                  //Icons
-                                  Expanded(
-                                      flex: 1,
-                                      child: Column(
-                                        children: [
-                                          ElevatedButton(
-                                              onPressed: () async {
-                                                await DbService()
-                                                    .editProduct();
-                                              },
-                                              child: const Icon(Icons.edit),),
-                                          ElevatedButton(
-                                              onPressed: () async {
-                                                await DbService()
-                                                    .deleteSelectedProduct();
-                                              },
-                                              child: const Icon(Icons.delete),),
-                                        ],
-                                      )),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    } else {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  },
-                ),
-              ))
-        ],
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => const CreateProduct(),
-            ),
-          );
+              context,
+              MaterialPageRoute(
+                builder: (context) => CreateProduct(),
+              ));
         },
-        child: const Column(
+        child: Column(
           children: [
-            Icon(Icons.add),
-            Text("Add New Product"),
+            Expanded(
+              child: Icon(
+                Icons.add,
+                size: 27,
+              ),
+            ),
+            Text(
+              "New",
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+            ),
           ],
         ),
       ),
+      appBar: AppBar(
+        title: Text("all Product"),
+      ),
+      body: FutureBuilder(
+          future: DbService().getAllProduct(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text("Errorrrrrrr"),
+              );
+            }
+            if (snapshot.hasData) {
+              var data = snapshot.data as List<ProductModel>;
+              print("the data is " + data.length.toString());
+              return ListView.builder(
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 70,
+                      width: 348,
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 0.2),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CircleAvatar(
+                              radius: 23,
+                              child: Text("${index + 1}"),
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Name: ${data[index].name!}",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  Text(
+                                    "Price: Rs ${data[index].price.toString()}",
+                                    style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w300),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              IconButton(
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title: Text(
+                                                "Are you sure u want ot delete this product?"),
+                                            actions: [
+                                              ElevatedButton(
+                                                onPressed: () async {
+                                                  await DbService()
+                                                      .deleteProduct(
+                                                          data[index].id!);
+                                                  Navigator.pop(context);
+                                                  setState(
+                                                    () {},
+                                                  );
+                                                },
+                                                child: Text("Yes"),
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Text("No"),
+                                              )
+                                            ],
+                                          );
+                                        });
+                                  },
+                                  icon: Icon(
+                                    Icons.delete,
+                                    size: 22,
+                                  )),
+                              IconButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => CreateProduct(
+                                          product: data[index],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  icon: Icon(
+                                    Icons.edit,
+                                    size: 22,
+                                  )),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                  // ListTile(
+                  //   leading: CircleAvatar(
+                  //     radius: 23,
+                  //     child: Text("${index + 1}"),
+                  //   ),
+                  //   title: Text("Name: ${data[index].name!}"),
+                  //   subtitle: Text("Price: Rs${data[index].price.toString()}"),
+                  //   trailing: Column(
+                  //     children: [
+                  //       IconButton(
+                  //           onPressed: () async {
+                  //             await DbService().editProduct();
+                  //           },
+                  //           icon: Icon(
+                  //             Icons.edit,
+                  //             size: 18,
+                  //           )),
+                  //       IconButton(
+                  //           onPressed: () async {
+                  //             await DbService().deleteProduct();
+                  //           },
+                  //           icon: Icon(
+                  //             Icons.delete,
+                  //             size: 18,
+                  //           )),
+                  //     ],
+                  //   ),
+                  // );
+                },
+              );
+            } else {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          }),
     );
   }
 }

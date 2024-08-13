@@ -16,27 +16,54 @@ class DbService {
     }
   }
 
-  Future editProduct(ProductModel product, int id) async {
-    // await
-  }
-  Future deleteSelectedProduct(int id) async {
-    // await
+  Future editProduct(ProductModel model) async {
+    print("The new model is ${model.id}");
+    // await db
+    //     .collection("Products")
+    //     .doc(model.id)
+    //     .update(model.toFirestore())
+    //     .then(
+    //   (value) {
+    //     print("Product updated successfully");
+    //   },
+    // );
+
+    await db
+        .collection("Products")
+        .doc(model.id)
+        .set(model.toFirestore(), SetOptions(merge: true));
   }
 
-  Future getAllProduct() async {
+  Future deleteProduct(String id) async {
+    await db.collection("Products").doc(id).delete().then((value) {
+      print("Deleted Successfully wuth following value");
+    });
+  }
+
+  Future<List<ProductModel>> getAllProduct() async {
     List<ProductModel> allProduct = [];
     try {
       await db.collection("Products").get().then((qsnapshot) {
         var allDocs = qsnapshot.docs;
 
+        print(allDocs);
+
         for (var doc in allDocs) {
+          db.collection("Products").doc(doc.id).set(
+            {
+              'id': doc.id,
+            },
+            SetOptions(merge: true),
+          );
           ProductModel productModel = ProductModel.fromFirebase(doc.data());
           allProduct.add(productModel);
         }
-        return allProduct;
+        print(allProduct);
+        // return allProduct;
       });
     } catch (e) {
-      return "Unable to find data because of $e";
+      print("Unable to find data because of $e");
     }
+    return allProduct;
   }
 }

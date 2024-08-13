@@ -4,7 +4,8 @@ import 'package:firebase_demo/services/db_service.dart';
 import 'package:flutter/material.dart';
 
 class CreateProduct extends StatefulWidget {
-  const CreateProduct({super.key});
+  ProductModel? product;
+  CreateProduct({super.key, this.product});
 
   @override
   State<CreateProduct> createState() => _CreateProductState();
@@ -17,10 +18,20 @@ class _CreateProductState extends State<CreateProduct> {
   final TextEditingController _manufactureDateController =
       TextEditingController();
   @override
+  void initState() {
+    if (widget.product != null) {
+      _nameController.text = widget.product!.name!;
+      _priceController.text = widget.product!.price!.toString();
+      _brandController.text = widget.product!.brand!;
+      _manufactureDateController.text = widget.product!.manufacturedDate!;
+    }
+    super.initState();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Create product"),
+        title: Text(widget.product == null ? "Create product" : "Edit Product"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -65,6 +76,7 @@ class _CreateProductState extends State<CreateProduct> {
               ElevatedButton(
                   onPressed: () async {
                     ProductModel pro = ProductModel(
+                      // id: widget.product!.id??"NUll",
                       name: _nameController.text,
                       price: int.parse(
                         _priceController.text,
@@ -73,12 +85,29 @@ class _CreateProductState extends State<CreateProduct> {
                       manufacturedDate: _manufactureDateController.text,
                     );
                     try {
-                      await DbService().addProduct(pro);
+                      if (widget.product != null) {
+                        ProductModel pro = ProductModel(
+                          id: widget.product!.id ?? "NUll",
+                          name: _nameController.text,
+                          price: int.parse(
+                            _priceController.text,
+                          ),
+                          brand: _brandController.text,
+                          manufacturedDate: _manufactureDateController.text,
+                        );
+                        await DbService().editProduct(pro);
+                      }
+
+                      if (widget.product == null) {
+                        await DbService().addProduct(pro);
+                      }
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           backgroundColor: Colors.green,
                           content: Text(
-                            "Created Successfully",
+                            widget.product == null
+                                ? "Created Successfully"
+                                : "Edited Successfully",
                           ),
                         ),
                       );
@@ -87,7 +116,9 @@ class _CreateProductState extends State<CreateProduct> {
                       throw Exception(e.toString());
                     }
                   },
-                  child: Text("Add Product"))
+                  child: Text(widget.product == null
+                      ? "Add Product"
+                      : "Update Product"))
             ],
           ),
         ),
