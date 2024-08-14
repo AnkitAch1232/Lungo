@@ -1,5 +1,8 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:firebase_demo/models/product_model.dart';
 import 'package:firebase_demo/screens/create_product.dart';
+import 'package:firebase_demo/screens/img_add_screen.dart';
 import 'package:firebase_demo/services/db_service.dart';
 import 'package:flutter/material.dart';
 
@@ -17,13 +20,14 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => CreateProduct(),
-              ));
+            context,
+            MaterialPageRoute(
+              builder: (context) => CreateProduct(),
+            ),
+          );
         },
         child: Column(
-          children: [
+          children: const [
             Expanded(
               child: Icon(
                 Icons.add,
@@ -39,6 +43,19 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       appBar: AppBar(
         title: Text("all Product"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ImgAddScreen(),
+                ),
+              );
+            },
+            icon: Text("Hello Brother"),
+          ),
+        ],
       ),
       body: FutureBuilder(
           future: DbService().getAllProduct(),
@@ -153,34 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   );
-                  // ListTile(
-                  //   leading: CircleAvatar(
-                  //     radius: 23,
-                  //     child: Text("${index + 1}"),
-                  //   ),
-                  //   title: Text("Name: ${data[index].name!}"),
-                  //   subtitle: Text("Price: Rs${data[index].price.toString()}"),
-                  //   trailing: Column(
-                  //     children: [
-                  //       IconButton(
-                  //           onPressed: () async {
-                  //             await DbService().editProduct();
-                  //           },
-                  //           icon: Icon(
-                  //             Icons.edit,
-                  //             size: 18,
-                  //           )),
-                  //       IconButton(
-                  //           onPressed: () async {
-                  //             await DbService().deleteProduct();
-                  //           },
-                  //           icon: Icon(
-                  //             Icons.delete,
-                  //             size: 18,
-                  //           )),
-                  //     ],
-                  //   ),
-                  // );
+                  
                 },
               );
             } else {

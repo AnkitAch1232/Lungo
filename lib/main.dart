@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_demo/screens/home_screen.dart';
+import 'package:firebase_demo/screens/img_add_screen.dart';
 import 'package:firebase_demo/screens/login_screen.dart';
 // import 'package:firebase_demo/splash/Intro_screen.dart';
 import 'package:flutter/material.dart';
@@ -52,9 +53,7 @@ class MyApp extends StatelessWidget {
               return LoginScreen();
             }
           },
-        )
-        //const MyHomePage(title: 'Flutter Demo Home Page'),
-        );
+        ));
   }
 }
 
