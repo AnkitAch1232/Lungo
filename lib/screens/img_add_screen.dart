@@ -73,16 +73,28 @@ class _ImgAddScreenState extends State<ImgAddScreen> {
             ),
             InkWell(
               onTap: () async {
-                String url = await StorageSevices().uploadImage(pickedFile!);
-                setState(() {
-                  downloadUrl = url;
-                });
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    backgroundColor: Colors.green,
-                    content: Text("Uploaded Successfully"),
-                  ),
-                );
+                if (pickedFile != null) {
+                  String url = await StorageSevices().uploadImage(pickedFile!);
+                  setState(() {
+                    downloadUrl = url;
+                  });
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      backgroundColor: Colors.green,
+                      content: Text("Uploaded Successfully"),
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    backgroundColor: Colors.red,
+                    content: Text(
+                      "Image not selected",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ));
+                }
               },
               child: Container(
                 height: 54,
