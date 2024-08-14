@@ -1,7 +1,6 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_demo/services/storage_sevices.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -14,6 +13,7 @@ class ImgAddScreen extends StatefulWidget {
 
 class _ImgAddScreenState extends State<ImgAddScreen> {
   File? pickedFile;
+  String? downloadUrl;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,6 +35,12 @@ class _ImgAddScreenState extends State<ImgAddScreen> {
                   setState(() {
                     pickedFile = File(result.files.single.path!);
                   });
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      backgroundColor: Colors.green,
+                      content: Text("Image Picked"),
+                    ),
+                  );
                 } else {
                   // User canceled the picker
                 }
@@ -66,6 +72,18 @@ class _ImgAddScreenState extends State<ImgAddScreen> {
                     ),
             ),
             InkWell(
+              onTap: () async {
+                String url = await StorageSevices().uploadImage(pickedFile!);
+                setState(() {
+                  downloadUrl = url;
+                });
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    backgroundColor: Colors.green,
+                    content: Text("Uploaded Successfully"),
+                  ),
+                );
+              },
               child: Container(
                 height: 54,
                 width: 150,
@@ -77,14 +95,39 @@ class _ImgAddScreenState extends State<ImgAddScreen> {
               ),
             ),
             Container(
-              height: 184,
-              width: 220,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(width: 1),
-              ),
-            ),
+                height: 184,
+                width: 220,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(width: 1),
+                ),
+                child: downloadUrl != null
+                    ? Image.network(downloadUrl!)
+                    : Center(
+                        child: Text("No image to show"),
+                      )),
             InkWell(
+              onTap: () async {
+                if (downloadUrl != null) {
+                  await StorageSevices().downloadImage(downloadUrl!);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      backgroundColor: Colors.green,
+                      content: Text("Downloaded Successfully"),
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    backgroundColor: Colors.red,
+                    content: Text(
+                      "Image not selected",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ));
+                }
+              },
               child: Container(
                 height: 54,
                 width: 150,
@@ -92,7 +135,9 @@ class _ImgAddScreenState extends State<ImgAddScreen> {
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(width: 1),
                 ),
-                child: Center(child: Text("Download Image")),
+                child: Center(
+                  child: Text("Download Image"),
+                ),
               ),
             ),
           ],
